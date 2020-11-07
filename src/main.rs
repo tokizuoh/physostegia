@@ -12,7 +12,7 @@ struct Argument {
 }
 
 fn input(message: &str) -> String {
-    print!("{}: ", message);
+    print!("{}: ", message.bold());
     io::stdout().flush().unwrap(); 
 
     let mut word = String::new();
@@ -26,14 +26,18 @@ fn main() -> Result<()> {
     let content = std::fs::read_to_string(&args.path)
         .with_context(|| format!("could not read file `{:p}`", &args.path))?;
     
-    // TODO: マッチさせたい正規表現を生成
-    // loop {
-    //     let a = input("入力させたい");
-    //     println!("Result: {}", a.bold());
-    //     if a == "q" {
-    //         break;
-    //     }
-    // }
+    let mut words: Vec<String> = Vec::new();
+    loop {
+        let input_word = input("Input");
+        if input_word == "q" {
+            break;
+        }
+        println!("Result: {}", input_word.bold());
+        words.push(input_word);
+        println!();
+    }
+
+    println!("{}", words.len());
 
     // 一行ずつ呼んで処理
     for line in content.lines() {

@@ -8,5 +8,6 @@ edition = "2018"
 
 [dependencies]
 regex = "1.4.2"
-structopt = "0.3.20"
 anyhow = "1.0.34"
+colored = "2"
+structopt = "0.3.20"

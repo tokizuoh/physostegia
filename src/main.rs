@@ -21,33 +21,40 @@ fn input(message: &str) -> String {
 }
 
 fn main() -> Result<()> {
-    // 入力受付
     let args = Argument::from_args();
     let content = std::fs::read_to_string(&args.path)
         .with_context(|| format!("could not read file `{:p}`", &args.path))?;
-    
+
+    println!();
+    println!("{} {}", "📝 Please input target words!".bold(), "(Type enter or q to exit)".yellow());
     let mut words: Vec<String> = Vec::new();
     loop {
-        let input_word = input("Input");
-        if input_word == "q" {
+        let input_word = input("[Target]");
+        if input_word == "q" || input_word == "" {
             break;
         }
-        println!("Result: {}", input_word.bold());
         words.push(input_word);
         println!();
     }
 
-    println!("{}", words.len());
-
-    // 一行ずつ呼んで処理
+    println!();
+    println!("{}", "RESULT".blue().bold());
+    let mut did_matched = false;
     for line in content.lines() {
-        println!("{}", line);
+        // FIXME: iはouterで出す
+        for (i, word) in words.iter_mut().enumerate() {
+            let re = Regex::new(word).unwrap();
+            if !re.is_match(line) {
+                continue
+            }
+            did_matched = true;
+            println!("line{}: {} [{}]", i + 1, line, word);
+        }
     }
-        
-    // let _words = r"^\d{4}";
-    // let re = Regex::new(r"^\d{4}-\d{2}-\d{2}$").unwrap();
-    // let re2 = Regex::new(r"^\d{4}-\d{2}-\d{2}").unwrap();
-    // assert!(re.is_match("2014-01-01ああ"));
-    // println!("{}", 1);
+
+    if !did_matched {
+        println!("{}", "No Matched.")
+    }
+
     Ok(())
 }

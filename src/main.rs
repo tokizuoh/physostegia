@@ -11,6 +11,11 @@ struct Argument {
     path: std::path::PathBuf,
 }
 
+struct Line {
+    number: usize,
+    content: String,
+}
+
 fn input(message: &str) -> String {
     print!("{}: ", message.bold());
     io::stdout().flush().unwrap(); 
@@ -39,21 +44,21 @@ fn main() -> Result<()> {
 
     println!();
     println!("{}", "RESULT".blue().bold());
-    let mut did_matched = false;
+    let mut lines: Vec<Line> = Vec::new();
     for (i, line) in content.lines().enumerate() {
         for word in words.iter_mut() {
             let re = Regex::new(word).unwrap();
             if !re.is_match(line) {
                 continue
             }
-            did_matched = true;
-            println!("line{}: {} [{}]", i + 1, line, word);
+            lines.push(Line{number: i, content: word.to_string()});
         }
     }
 
-    if !did_matched {
-        println!("{}", "No Matched.")
+    if lines.len() > 0 {
+        panic!("hoge");
+    } else {
+        println!("{}", "No matched.".red().bold());
     }
-
     Ok(())
 }

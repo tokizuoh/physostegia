@@ -4,6 +4,7 @@ use colored::*;
 use regex::Regex;
 use structopt::StructOpt;
 use anyhow::{Context, Result};
+use itertools::join;
 
 #[derive(StructOpt)]
 struct Argument {
@@ -13,6 +14,7 @@ struct Argument {
 
 struct Line {
     number: usize,
+    matched_words: Vec<String>,
     content: String,
 }
 
@@ -31,7 +33,7 @@ fn main() -> Result<()> {
         .with_context(|| format!("could not read file `{:p}`", &args.path))?;
 
     println!();
-    println!("{} {}", "📝 Please input target words!".bold(), "(Type enter or q to exit)".yellow());
+    println!("{} {}", "📝 Please input target words!".bold(), "(Type enter to exit)".yellow());
     let mut words: Vec<String> = Vec::new();
     loop {
         let input_word = input("[Target]");
@@ -39,26 +41,33 @@ fn main() -> Result<()> {
             break;
         }
         words.push(input_word);
-        println!();
     }
 
-    println!();
-    println!("{}", "RESULT".blue().bold());
     let mut lines: Vec<Line> = Vec::new();
     for (i, line) in content.lines().enumerate() {
+        let mut matched_words: Vec<String> = Vec::new();
         for word in words.iter_mut() {
             let re = Regex::new(word).unwrap();
             if !re.is_match(line) {
                 continue
             }
-            lines.push(Line{number: i, content: word.to_string()});
+            matched_words.push(word.to_string());
         }
+        if matched_words.is_empty() {
+            continue
+        }
+        lines.push(Line{number: i, matched_words:matched_words, content: line.to_string()});
     }
 
-    if lines.len() > 0 {
-        panic!("hoge");
-    } else {
+    println!();
+    if lines.is_empty() {
         println!("{}", "No matched.".red().bold());
+    } else {
+        println!("{}", "Matched!".green().bold());
+        for line in lines {
+            let matched_words = join(line.matched_words, ",");
+            println!("line{}: {} [{}]", line.number, line.content, matched_words.blue());
+        }
     }
     Ok(())
 }

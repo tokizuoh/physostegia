@@ -40,9 +40,8 @@ fn main() -> Result<()> {
     println!();
     println!("{}", "RESULT".blue().bold());
     let mut did_matched = false;
-    for line in content.lines() {
-        // FIXME: iはouterで出す
-        for (i, word) in words.iter_mut().enumerate() {
+    for (i, line) in content.lines().enumerate() {
+        for word in words.iter_mut() {
             let re = Regex::new(word).unwrap();
             if !re.is_match(line) {
                 continue

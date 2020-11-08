@@ -27,6 +27,10 @@ fn input(message: &str) -> String {
     word.trim().to_string()
 }
 
+fn wrap_brackets(word: &str) -> String {
+    "[".to_string() + word + "]"
+}
+
 fn main() -> Result<()> {
     let args = Argument::from_args();
     let content = std::fs::read_to_string(&args.path)
@@ -65,8 +69,9 @@ fn main() -> Result<()> {
     } else {
         println!("{}", "Matched!".green().bold());
         for line in lines {
-            let matched_words = join(line.matched_words, ",");
-            println!("line{}: {} [{}]", line.number, line.content, matched_words.blue());
+            let a: Vec<String> = line.matched_words.into_iter().map(|x| wrap_brackets(&x)).collect();
+            let matched_words = join(a, "");
+            println!("line{}: {} {}", line.number, line.content.bold(), matched_words.blue());
         }
     }
     Ok(())

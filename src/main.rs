@@ -56,7 +56,6 @@ fn main() -> Result<()> {
         .with_context(|| format!("could not read file `{:p}`", &args.path))?;
 
     println!();
-    // println!("{} {}", "📝 Please input target words!".bold(), "(Type enter to exit)".yellow());
     println!("{} {}", "📝 Please input regex type & target!".bold(), "(Type enter to exit)".yellow());
     println!("{}", "[Type]");
     println!("{}", "1: PARTIAL");
@@ -64,9 +63,7 @@ fn main() -> Result<()> {
     println!();
     let mut queries: Vec<Query> = Vec::new();
     loop {
-        // let input_word = input("[Target]");
         let input_type = input_u8("[Type]");
-        
         // FIXME: Resultで受け取る
         if input_type == 9 {
             break;

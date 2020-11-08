@@ -107,6 +107,7 @@ fn main() -> Result<()> {
         for line in lines {
             let brackets_matched_words: Vec<String> = line.matched_words.into_iter().map(|x| wrap_brackets(&x)).collect();
             let matched_words_string = join(brackets_matched_words, "");
+            // FIXME: 入力のタイプで出力を分ける
             println!("line{}: {} {}", line.number, line.content.bold(), matched_words_string.blue());
         }
     }

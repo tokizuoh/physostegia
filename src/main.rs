@@ -69,9 +69,9 @@ fn main() -> Result<()> {
     } else {
         println!("{}", "Matched!".green().bold());
         for line in lines {
-            let a: Vec<String> = line.matched_words.into_iter().map(|x| wrap_brackets(&x)).collect();
-            let matched_words = join(a, "");
-            println!("line{}: {} {}", line.number, line.content.bold(), matched_words.blue());
+            let brackets_matched_words: Vec<String> = line.matched_words.into_iter().map(|x| wrap_brackets(&x)).collect();
+            let matched_words_string = join(brackets_matched_words, "");
+            println!("line{}: {} {}", line.number, line.content.bold(), matched_words_string.blue());
         }
     }
     Ok(())

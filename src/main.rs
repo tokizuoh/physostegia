@@ -76,3 +76,10 @@ fn main() -> Result<()> {
     }
     Ok(())
 }
+
+#[test]
+fn wrap_brackets_side() {
+    let a = "[test]";
+    let b = wrap_brackets("test");
+    assert_eq!(a, b);
+}

@@ -57,9 +57,10 @@ fn main() -> Result<()> {
 
     println!();
     // println!("{} {}", "📝 Please input target words!".bold(), "(Type enter to exit)".yellow());
-    println!("{} {}", "📝 Please input regex type!".bold(), "(Type enter to exit)".yellow());
-    println!("{}", "1: 部分一致");
-    println!("{}", "2: 末尾一致");
+    println!("{} {}", "📝 Please input regex type & target!".bold(), "(Type enter to exit)".yellow());
+    println!("{}", "[Type]");
+    println!("{}", "1: PARTIAL");
+    println!("{}", "2: END");
     println!();
     let mut queries: Vec<Query> = Vec::new();
     loop {
@@ -83,10 +84,9 @@ fn main() -> Result<()> {
         for query in queries.iter_mut() {
             let word = match query._type {
                 1 => query.word.clone(),
-                2 => format!("{}{}", &query.word, "$"),
+                2 => format!("{}$", &query.word),
                 _ => panic!("NOT AVAILABLE")
             };
-            let word = &query.word;
             let re = Regex::new(&word).unwrap();
             if !re.is_match(line) {
                 continue
@@ -110,6 +110,7 @@ fn main() -> Result<()> {
             println!("line{}: {} {}", line.number, line.content.bold(), matched_words_string.blue());
         }
     }
+    
     Ok(())
 }
 
@@ -121,7 +122,7 @@ fn test_wrap_brackets() {
 }
 
 #[test]
-fn translate_string_to_u8_test() {
+fn test_translate_string_to_u8() {
     let a: u8 = 1;
     let b = translate_string_to_u8("1".to_string());
     assert_eq!(a, b);

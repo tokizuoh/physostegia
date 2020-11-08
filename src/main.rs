@@ -41,7 +41,7 @@ fn main() -> Result<()> {
     let mut words: Vec<String> = Vec::new();
     loop {
         let input_word = input("[Target]");
-        if input_word == "q" || input_word == "" {
+        if input_word == "" {
             break;
         }
         words.push(input_word);
